@@ -11,8 +11,6 @@ from manafa.utils.Logger import log, LogSeverity
 
 MANAFA_RESOURCES_DIR = get_resources_dir()
 MAX_SIZE = sys.maxsize
-TO_INSTRUMENT_FILE = os.path.join(MANAFA_RESOURCES_DIR, 'to_instrument_file.txt')
-NOT_INSTRUMENT_FILE = os.path.join(MANAFA_RESOURCES_DIR, 'not_instrument_file.txt')
 MANAFA_INSPECTOR_URL = "https://greensoftwarelab.github.io/manafa-inspector/"
 
 
@@ -30,9 +28,7 @@ def has_connected_devices():
 
 def create_manafa(args):
     if args.hunter or args.hunterfile is not None:
-        return HunterEManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=MANAFA_RESOURCES_DIR,
-            instrument_file=TO_INSTRUMENT_FILE,
-            not_instrument_file=NOT_INSTRUMENT_FILE)
+        return HunterEManafa(power_profile=args.profile, timezone=args.timezone, resources_dir=MANAFA_RESOURCES_DIR)
     elif not args.hunter and args.app_package is not None:
         return AMEManafa(app_package_name=args.app_package, power_profile=args.profile, timezone=args.timezone,
                          resources_dir=MANAFA_RESOURCES_DIR)
@@ -109,7 +105,7 @@ def main():
     validate_start()
     manafa = create_manafa(args)
     if has_device_conn and invalid_file_args:
-        manafa.init()
+        manafa.init(clean=True)
         manafa.start()
         log("profiling...")
         if args.time_in_secs == 0:
@@ -125,7 +121,6 @@ def main():
         total, per_c, timeline = manafa.get_consumption_in_between(begin, end)
         print_profiled_stats(end-begin, total, per_c, timeline)
         out_file = manafa.save_final_report(begin, output_filepath=args.output_file)
-        manafa.clean()
         log(f"Output file: {out_file}. You can inspect it with E-MANAFA Inspector in {MANAFA_INSPECTOR_URL}",
             log_sev=LogSeverity.SUCCESS)
     else:

@@ -1,7 +1,5 @@
 import json
 import os
-import time
-
 from manafa.emanafa import EManafa, MANAFA_RESOURCES_DIR
 from manafa.parsing.hunter.HunterParser import HunterParser
 from manafa.services.LogcatService import LogcatService
@@ -25,23 +23,22 @@ class HunterEManafa(EManafa):
                  power_profile=None,
                  timezone=None,
                  resources_dir=MANAFA_RESOURCES_DIR,
-                 instrument_file=None,
-                 not_instrument_file=None, **kwargs):
+                 **kwargs):
         super(HunterEManafa, self).__init__(power_profile=power_profile, timezone=timezone, resources_dir=resources_dir, **kwargs)
         self.app_consumptions = AppConsumptionStats()
         self.app_consumptions_log = ""
         self.log_service = LogcatService()
         self.hunter_log_parser = HunterParser()
         self.hunter_out_file = None
-        self.instrument_file = instrument_file
-        self.not_instrument_file = not_instrument_file
 
-    def init(self):
+    def init(self, clean=False):
         """inits inner services.
         Calls init from super class and also from the log service.
         """
         super().init()
         self.log_service.init(boot_time=self.boot_time)
+        if clean:
+            self.clean()
 
     def start(self):
         """starts inner services."""

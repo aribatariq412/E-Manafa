@@ -32,11 +32,11 @@ class AMEManafa(EManafa):
         self.am_log_parser = AMParser()
         self.trace_out_file = None
 
-    def init(self):
+    def init(self, clean=False):
         """inits inner services.
         Calls init from super class and also from the log service.
         """
-        super().init()
+        super().init(clean)
         self.log_service.init(boot_time=self.boot_time)
 
     def start(self):

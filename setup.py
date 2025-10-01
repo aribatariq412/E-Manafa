@@ -14,7 +14,7 @@ setup(
     author_email='rui.rrua@gmail.com',
     url='https://github.com/RRua/e-manafa',
     license='MIT',
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=['manafa.tests', 'manafa.tests.*']),
     use_incremental=True,
     install_requires=[
         'pytz==2021.1',

@@ -79,13 +79,15 @@ class EManafa(Service):
     def config(self, **kwargs):
         pass
 
-    def init(self):
+    def init(self, clean=False):
         """inits inner services and virtually unplugs device if it is fully charged"""
         self.boot_time = get_last_boot_time()
         self.batterystats.init(boot_time=self.boot_time)
         self.perfetto.init(boot_time=self.boot_time)
         self.validate_start()
         self.unplug_if_fully_charged()
+        if clean:
+            self.clean()
 
 
     def start(self):

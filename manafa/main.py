@@ -95,7 +95,7 @@ def main():
     parser.add_argument("-o", "--output_file", help="output file", default=None, type=str)
     parser.add_argument("-s", "--time_in_secs", help="time to profile", default=0, type=int)
     parser.add_argument("-a", "--app_package", help="package of app to profile", default=None, type=str)
-
+    parser.add_argument("-cmd", "--command", help="command to profile", default=None, type=str)
     args = parser.parse_args()
     has_device_conn = has_connected_devices()
     invalid_file_args = (args.perfettofile is None or args.batstatsfile is None) and args.directory is None
@@ -108,7 +108,11 @@ def main():
         manafa.init(clean=True)
         manafa.start()
         log("profiling...")
-        if args.time_in_secs == 0:
+        if args.command is not None:
+            log("executing command to profile: %s" % args.command)
+            os.system(args.command)
+            log("executed command")
+        elif args.time_in_secs == 0:
             # creates killable process that runs record_events function, since there isnt an easy way to kill threads in python
             input("press any key to stop monitoring")
         else:

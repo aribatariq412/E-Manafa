@@ -1,9 +1,18 @@
+"""Services module for E-MANAFA.
 
-"""A one line summary of the module or program, terminated by a period.
-
-Leave one blank line.  The rest of this docstring should contain an
-overall description of the module or program.  Optionally, it may also
-contain a brief description of exported classes and functions and/or usage
-examples.
-
+This module contains services for profiling Android applications,
+including Perfetto-based power profiling with support for both
+legacy devices and newer devices with power.rails.* data sources.
 """
+
+from .perfettoService import PerfettoService, device_has_perfetto
+from .perfettoServiceEnhanced import PerfettoServiceEnhanced, device_supports_power_rails
+from .perfettoServiceFactory import create_perfetto_service
+
+__all__ = [
+    'PerfettoService',
+    'PerfettoServiceEnhanced', 
+    'create_perfetto_service',
+    'device_has_perfetto',
+    'device_supports_power_rails'
+]

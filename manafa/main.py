@@ -207,12 +207,7 @@ def parse_results(args, manafa):
             if not is_converted:
                 matching_pft_files[0] = convert_to_systrace(matching_pft_files[0])
             matching_ht_files = [x for x in mega_find(args.directory, pattern="hunter-*") if b_file_id in x]
-            if len(matching_ht_files) > 0:
-                _, fc = manafa.parse_results(bts_file=b_file, pf_file=matching_pft_files[0], htr_file=matching_ht_files[0])
-                if fc is not None:
-                    shutil.copyfile(fc, os.path.basename(fc))
-            else:
-                manafa.parse_results(b_file, matching_pft_files[0])
+            manafa.parse_results(b_file, matching_pft_files[0])
             begin = manafa.perf_events.events[0].time if len(manafa.perf_events.events) > 1 else manafa.bat_events.events[0].time
             out_file = manafa.save_final_report(begin, output_filepath=args.output_file)
             log(f"Output file: {out_file}. You can inspect it with E-MANAFA Inspector in {MANAFA_INSPECTOR_URL}",
